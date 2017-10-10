@@ -11,7 +11,7 @@ const store = new Vuex.Store({
         userInfo : {
             expire : '',
             token : '',
-            userName : '',
+            userName : [],
             albumNames : '',
         },
         images : [],
@@ -21,9 +21,18 @@ const store = new Vuex.Store({
 
     },
     mutations : {
+        // 保存jwt认证后的token和expire
         setToken(state,payload) {
             state.userInfo.expire = payload.expire;
             state.userInfo.token = payload.token;
+        },
+        // 保存获取的相册数组
+        setAlbums (state,payload){
+            state.userInfo.albumNames = payload;
+        },
+        // 保存相册的图片信息
+        putImages (state , payload){
+            state.images = payload
         }
     }
 

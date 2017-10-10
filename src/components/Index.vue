@@ -17,7 +17,13 @@ export default {
         }
     },
     mounted (){
-//        axios.post(this.$store.state.baseUrl+'/auth/managealbum/get',this.$store.state.userInfo.userName)
+        axios.post(this.$store.state.baseUrl+'/auth/managealbum/get',this.$store.state.userInfo.userName)
+            .then(res => {
+
+            })
+            .catch(err => {
+
+            })
     },
     methods : {
 
