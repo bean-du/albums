@@ -20,16 +20,7 @@
 </template>
 
 <script>
-//  axios.interceptors.request.use(
-//      config => {
-//          if (localStorage.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-//              config.headers.Authorization = `token ${localStorage.token}`;
-//          }
-//          return config;
-//      },
-//      err => {
-//          return Promise.reject(err);
-//      });
+import axios from 'axios';
 export default {
   name: 'login',
   data () {
@@ -53,9 +44,9 @@ export default {
           }
           axios.post(this.$store.state.baseUrl+'/login',JSON.stringify(this.userInfo))
               .then(res => {
+                  this.$store.commit('setToken',res.data);
                   localStorage.token_expire = res.data.expire;
                   localStorage.token = res.data.token;
-                  console.log(localStorage)
               })
               .catch(err => {
                   console.log(err)

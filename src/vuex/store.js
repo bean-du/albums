@@ -9,6 +9,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state : {
         userInfo : {
+            expire : '',
+            token : '',
             userName : '',
             albumNames : '',
         },
@@ -19,7 +21,10 @@ const store = new Vuex.Store({
 
     },
     mutations : {
-
+        setToken(state,payload) {
+            state.userInfo.expire = payload.expire;
+            state.userInfo.token = payload.token;
+        }
     }
 
 })

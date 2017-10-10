@@ -2,7 +2,8 @@
     <div id="index" class="row">
         <div class="col-xs-6 col-md-3">
             <a href="#" class="thumbnail">
-                <img src="..." class="img-responsive" alt="...">
+                test
+                <!--<img src="" class="img-responsive" alt="">-->
             </a>
         </div>
     </div>
@@ -16,7 +17,7 @@ export default {
         }
     },
     mounted (){
-        axios.post(this.$store.state.baseUrl+'/auth/managealbum/get',this.$store.state.userInfo.userName)
+//        axios.post(this.$store.state.baseUrl+'/auth/managealbum/get',this.$store.state.userInfo.userName)
     },
     methods : {
 
