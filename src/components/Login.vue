@@ -12,7 +12,8 @@
           <input type="password" class=" form-control" placeholder="password" v-model="userInfo.password">
         </div>
         <div class="form-group">
-          <button class="btn btn-default btn-sm form-control login-btn" @click="doLogin">登 录</button>
+          <el-button class="form-control" @click="doLogin">登 录</el-button>
+          <!--<button class="btn btn-default btn-sm form-control login-btn" @click="doLogin">登 录</button>-->
         </div>
       </div>
     </div>
@@ -42,11 +43,26 @@ export default {
               alert('密码名不能为空');
               return false
           }
-          axios.post(this.$store.state.baseUrl+'/login',JSON.stringify(this.userInfo))
+          axios.post('/login',JSON.stringify(this.userInfo))
               .then(res => {
-                  this.$store.commit('setToken',res.data);
-                  localStorage.token_expire = res.data.expire;
-                  localStorage.token = res.data.token;
+                  console.log(res)
+                  if(res.status == 200){
+                      this.$store.commit('setToken',res.data);
+                      localStorage.userName = this.userInfo.userName;
+                      localStorage.token_expire = res.data.expire;
+                      localStorage.token = res.data.token;
+                      this.$notify({
+                          title : '提示信息',
+                          message : '登录成功',
+                          type : 'success'
+                      });
+                  }else {
+                      this.$notify({
+                          title : '提示信息',
+                          message : '账号或密码错误',
+                          type : 'error'
+                      });
+                  }
               })
               .catch(err => {
                   console.log(err)

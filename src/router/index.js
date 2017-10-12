@@ -4,7 +4,9 @@ import Login from '@/components/Login';
 import Index from '@/components/Index';
 
 Vue.use(Router);
+
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/login',
@@ -12,7 +14,7 @@ export default new Router({
       component: Login
     },
     {
-      path: '/',
+      path: '/index',
       name: 'index',
       mate : {
         requireAuth: true,

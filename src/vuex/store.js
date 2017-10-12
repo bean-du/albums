@@ -8,17 +8,20 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state : {
+        title: "My-Albums",
         userInfo : {
             expire : '',
             token : '',
-            userName : [],
-            albumNames : '',
+            userName : '',
+            albumNames : [],
         },
         images : [],
         baseUrl : 'http://59.110.160.110:9990',
     },
     getters :{
-
+        getToken(state){
+            return state.userInfo.token;
+        }
     },
     mutations : {
         // 保存jwt认证后的token和expire
@@ -36,5 +39,5 @@ const store = new Vuex.Store({
         }
     }
 
-})
+});
 export default store;
