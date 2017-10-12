@@ -45,7 +45,8 @@
                     </ul>
                 </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <h1 class="page-header">Dashboard</h1>
+                    <el-button type="button" @click="uploadImage">上传照片到此相册</el-button>
+                    <h1 class="page-header"></h1>
 
                     <div class="row placeholders">
                         <div class="col-xs-6 col-sm-3 placeholder">
@@ -84,11 +85,6 @@ export default {
         }
     },
     mounted (){
-//        let config = {
-//            headers : {
-//                Authorization:'Bearer '+this.$store.getters.getToken
-//            }
-//        };
         axios.post(
                 '/auth/managealbum/get',
                 JSON.stringify({username : localStorage.userName})
@@ -99,7 +95,9 @@ export default {
             })
     },
     methods : {
-
+        uploadImage (){
+            
+        }
     }
 }
 </script>
