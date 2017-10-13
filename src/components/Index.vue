@@ -45,6 +45,7 @@
                     </ul>
                 </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <upload-image :show.sync="show"></upload-image>
                     <el-button type="button" @click="uploadImage">上传照片到此相册</el-button>
                     <h1 class="page-header"></h1>
 
@@ -77,26 +78,33 @@
 </template>
 <script>
 import axios from 'axios';
+import UploadImage from './UploadImage.vue';
 export default {
     name : 'index',
     data () {
         return {
+            show : false,
             title : this.$store.state.title
         }
     },
+    components :{UploadImage},
     mounted (){
         axios.post(
                 '/auth/managealbum/get',
                 JSON.stringify({username : localStorage.userName})
             ).then(res => {
-
+                if (res.data.status == 0){
+                    this.$store.commit('setAlbums',res.data)
+                }else {
+                    this.$store.commit('setAlbums','您没有相册')
+                }
             }).catch(err => {
 
             })
     },
     methods : {
         uploadImage (){
-            
+            this.show = true;
         }
     }
 }

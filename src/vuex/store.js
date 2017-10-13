@@ -29,8 +29,9 @@ const store = new Vuex.Store({
             state.userInfo.expire = payload.expire;
             state.userInfo.token = payload.token;
         },
-        // 保存获取的相册数组
+        // 保存获取的相册名称数组
         setAlbums (state,payload){
+            console.log(payload);
             state.userInfo.albumNames = payload;
         },
         // 保存相册的图片信息
