@@ -26,22 +26,8 @@
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
                     <ul class="nav nav-sidebar">
-                        <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">Reports</a></li>
-                        <li><a href="#">Analytics</a></li>
-                        <li><a href="#">Export</a></li>
-                    </ul>
-                    <ul class="nav nav-sidebar">
-                        <li class="active"><a href="">Nav item</a></li>
-                        <li><a href="">Nav item again</a></li>
-                        <li><a href="">One more nav</a></li>
-                        <li><a href="">Another nav item</a></li>
-                        <li><a href="">More navigation</a></li>
-                    </ul>
-                    <ul class="nav nav-sidebar">
-                        <li class="active"><a href="">Nav item again</a></li>
-                        <li><a href="">One more nav</a></li>
-                        <li><a href="">Another nav item</a></li>
+                        <li class="active"><a href="#">相册列表 <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#" v-for="list in albumsName" @click="listImages(list)">{{list}}</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -50,22 +36,7 @@
                     <h1 class="page-header"></h1>
 
                     <div class="row placeholders">
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
+                        <div class="col-xs-6 col-sm-3 placeholder" v-for="image in images">
                             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
                             <h4>Label</h4>
                             <span class="text-muted">Something else</span>
@@ -88,13 +59,20 @@ export default {
         }
     },
     components :{UploadImage},
+    computed : {
+        // 获取相册列表
+        albumsName (){
+            return this.$store.getters.getAlbumsName;
+        },
+        // 获取相册内的图片列表
+        images (){
+            return this.$store.getters.getImagesList;
+        }
+    },
     mounted (){
-        axios.post(
-                '/auth/managealbum/get',
-                JSON.stringify({username : localStorage.userName})
-            ).then(res => {
+        axios.post('/auth/managealbum/get', JSON.stringify({username : localStorage.userName})).then(res => {
                 if (res.data.status == 0){
-                    this.$store.commit('setAlbums',res.data)
+                    this.$store.commit('setAlbums',res.data.data)
                 }else {
                     this.$store.commit('setAlbums','您没有相册')
                 }
@@ -103,8 +81,32 @@ export default {
             })
     },
     methods : {
+        // 打开上传弹窗
         uploadImage (){
             this.show = true;
+        },
+        // 获取选中的相册的图片列表
+        listImages (name){
+            axios.post('/auth/download?page=1&size=10',JSON.stringify({username :localStorage.userName,album:name})).then(res => {
+                if (res.data.status == 0){
+                    if (res.data.data == null){
+                        this.$notify({
+                            title : '提示信息',
+                            message : ' 相册是空的哦，上传一些照片吧',
+                            type : 'error'
+                        })
+                    }else {
+                        this.$store.commit('putImages',res.data.data);
+                    }
+                }else {
+                    this.$msgbox({
+                        title : '提示',
+                        message : '没有此相册',
+                    })
+                }
+            }).catch(err => {
+
+            })
         }
     }
 }

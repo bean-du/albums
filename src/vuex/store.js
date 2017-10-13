@@ -21,6 +21,12 @@ const store = new Vuex.Store({
     getters :{
         getToken(state){
             return state.userInfo.token;
+        },
+        getAlbumsName (state){
+            return state.userInfo.albumNames;
+        },
+        getImagesList(state){
+            return state.images;
         }
     },
     mutations : {
@@ -31,13 +37,12 @@ const store = new Vuex.Store({
         },
         // 保存获取的相册名称数组
         setAlbums (state,payload){
-            console.log(payload);
             state.userInfo.albumNames = payload;
         },
         // 保存相册的图片信息
         putImages (state , payload){
             state.images = payload
-        }
+        },
     }
 
 });

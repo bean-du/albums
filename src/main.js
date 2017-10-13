@@ -19,7 +19,6 @@ axios.defaults.baseURL = 'http://59.110.160.110:9990';
 axios.interceptors.request.use(function (config) {    // 这里的config包含每次请求的内容
     if (localStorage.token) {
         config.headers.Authorization = `Bearer ${localStorage.token}`;
-        console.log(config);
     }
     return config;
 }, function (err) {
