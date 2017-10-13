@@ -32,10 +32,11 @@
                     </ul>
                 </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <create-album :show.sync="show"></create-album>
+                    <create-album :show.sync="Create"></create-album>
                     <el-button class="my-create"  type="success" @click="showCreate">创建相册</el-button>
 
-                    <upload-image :showCreate.sync="show"></upload-image>
+                    
+                    <upload-image :show.sync="show"></upload-image>
                     <el-button class="my-upload" type="button" @click="uploadImage">上传照片到此相册</el-button>
                     <h1 class="page-header"></h1>
 
@@ -63,6 +64,7 @@ export default {
     name : 'index',
     data () {
         return {
+            Create : false,
             show : false,
             title : this.$store.state.title
         }
@@ -95,10 +97,11 @@ export default {
             this.show = true;
         },
         showCreate(){
-          this.show = true;
+          this.Create = true;
         },
         // 获取选中的相册的图片列表
         listImages (name){
+            this.$store.commit('setCurrentAlbum',name);
             axios.post('/auth/download?page=1&size=10',qs.stringify({username :localStorage.userName,album:name})).then(res => {
                 if (res.data.status == 0){
                     if (res.data.data == null){

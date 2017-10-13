@@ -3,8 +3,8 @@
         <el-dialog
                 title="创建相册"
                 :visible.sync="visible"
-                @close="$emit('update:show', false)"
-                :showCreate="show">
+                @close="$emit('update:Create', false)"
+                :show="Create">
             <el-input type="text" v-model="albumName"></el-input>
             <div>
                 <el-button type="success" @click="create">确定</el-button>
@@ -20,18 +20,18 @@
         data(){
             return {
                 albumName : '',
-                visible: this.show
+                visible: this.Create
             }
         },
         props: {
-            show: {
+            Create: {
                 type: Boolean,
                 default: false
             }
         },
         watch :{
             show () {
-                this.visible = this.show;
+                this.visible = this.Create;
             }
         },
         methods : {

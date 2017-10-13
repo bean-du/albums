@@ -15,9 +15,13 @@ const store = new Vuex.Store({
             userName : '',
             albumNames : [],
         },
+        currentAlbum : '',
         images : [],
     },
     getters :{
+        getCurrentAlbum : state => {
+            return state.currentAlbum;
+        },
         getToken(state){
             return state.userInfo.token;
         },
@@ -32,7 +36,7 @@ const store = new Vuex.Store({
             return images;
         },
         isLogin() {
-            let  token_expire = Date.parse(new Date(localStorage.token_expire || store.state.userInfo.expire));
+            let  token_expire = Date.parse(new Date(store.state.userInfo.expire  || localStorage.token_expire));
             let now_time = Date.parse(new Date());
             console.log('now_time : ',now_time,'expire : ',token_expire);
             if (localStorage.token != '' && token_expire > now_time){
@@ -54,8 +58,11 @@ const store = new Vuex.Store({
         },
         // 保存相册的图片信息
         putImages (state , payload){
-            state.images = payload
+            state.images = payload;
         },
+        setCurrentAlbum : (state , payload) => {
+            state.currentAlbum = payload;
+        }
     }
 
 });

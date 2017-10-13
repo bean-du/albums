@@ -1,16 +1,17 @@
 <template>
     <div class="dialog-container">
         <el-dialog
-                title="上传图片"
-                :visible.sync="visible"
-                @close="$emit('update:show', false)"
-                :show="show">
+            title="上传照片"
+            :visible.sync="visible"
+            @close="$emit('update:show', false)"
+            :show="show">
             <el-upload
                     class="ensure ensureButt"
                     action="http://59.110.160.110:9990/auth/upload"
                     :on-preview="handlePreview"
                     name="images"
-                    data=""
+                    ref="upload"
+                    data: postData
                     :on-remove="handleRemove"
                     :file-list="fileList"
                     :onError="uploadError"
@@ -43,6 +44,14 @@
                 this.visible = this.show;
             }
         },
+        computed : {
+            postData (){
+                return {
+                    username : localStorage.userName,
+                    album : this.$store.getters.getCurrentAlbum
+                }
+            }
+        },
         methods : {
             handleRemove(file, fileList) {
                 console.log(file, fileList);
@@ -50,8 +59,8 @@
             handlePreview(file,fileList) {
                 console.log(file,fileList);
             },
-            submitUpload (file){
-                console.log(file)
+            submitUpload() {
+                this.$refs.upload.submit();
             },
             uploadError (){
                 this.$notify({
