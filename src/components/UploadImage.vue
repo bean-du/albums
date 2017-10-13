@@ -10,6 +10,7 @@
                     action="http://59.110.160.110:9990/auth/upload"
                     :on-preview="handlePreview"
                     name="images"
+                    data=""
                     :on-remove="handleRemove"
                     :file-list="fileList"
                     :onError="uploadError"
@@ -59,7 +60,6 @@
                     type : 'error'
                 })
             },
-
             uploadSuccess (){
                 this.$notify({
                     title : '提示信息',

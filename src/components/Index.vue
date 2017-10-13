@@ -32,7 +32,10 @@
                     </ul>
                 </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <upload-image :show.sync="show"></upload-image>
+                    <create-album :show.sync="show"></create-album>
+                    <el-button class="my-create"  type="success" @click="showCreate">创建相册</el-button>
+
+                    <upload-image :showCreate.sync="show"></upload-image>
                     <el-button class="my-upload" type="button" @click="uploadImage">上传照片到此相册</el-button>
                     <h1 class="page-header"></h1>
 
@@ -55,6 +58,7 @@
 import axios from 'axios';
 import qs from 'qs';
 import UploadImage from './UploadImage.vue';
+import CreateAlbum from './CreateAlbum.vue';
 export default {
     name : 'index',
     data () {
@@ -63,7 +67,7 @@ export default {
             title : this.$store.state.title
         }
     },
-    components :{UploadImage},
+    components :{UploadImage,CreateAlbum},
     computed : {
         // 获取相册列表
         albumsName (){
@@ -89,6 +93,9 @@ export default {
         // 打开上传弹窗
         uploadImage (){
             this.show = true;
+        },
+        showCreate(){
+          this.show = true;
         },
         // 获取选中的相册的图片列表
         listImages (name){
@@ -181,6 +188,9 @@ export default {
             background-color: #f5f5f5;
             border-right: 1px solid #eee;
         }
+    }
+    .my-create {
+        float: left;
     }
     /* Sidebar navigation */
     .nav-sidebar {
