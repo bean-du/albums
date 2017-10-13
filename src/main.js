@@ -16,7 +16,7 @@ import store from './vuex/store.js';
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
 axios.defaults.baseURL = 'http://59.110.160.110:9990';
-axios.interceptors.request.use(function (config) {    // 这里的config包含每次请求的内容
+axios.interceptors.request.use(function (config) {
     if (localStorage.token) {
         config.headers.Authorization = `Bearer ${localStorage.token}`;
     }
@@ -24,19 +24,21 @@ axios.interceptors.request.use(function (config) {    // 这里的config包含�
 }, function (err) {
     return Promise.reject(err);
 });
-// router.beforeEach((to,from,next) => {
-//     if(to.meta.requireAuth){
-//         if (this.$store.state.userInfo.token != ''){
-//             next();
-//         }else {
-//             next({
-//                 path : '/login',
-//                 query : {redirect : to.fullPath}
-//             })
-//         }
-//     }
-// });
-/* eslint-disable no-new */
+router.beforeEach((to,from,next) => {
+    if(to.meta.requireAuth){
+        console.log(store.getters.isLogin);
+        if (store.getters.isLogin){
+            next();
+        }else {
+            next({
+                path : '/login',
+                query : {redirect : to.fullPath}
+            })
+        }
+    }else {
+        next()
+    }
+});
 new Vue({
     el: '#app',
     router,

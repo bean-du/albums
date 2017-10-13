@@ -51,11 +51,13 @@ export default {
                       localStorage.userName = this.userInfo.userName;
                       localStorage.token_expire = res.data.expire;
                       localStorage.token = res.data.token;
+
                       this.$notify({
                           title : '提示信息',
                           message : '登录成功',
                           type : 'success'
                       });
+                      this.$router.push({path:'index'})
                   }else {
                       this.$notify({
                           title : '提示信息',

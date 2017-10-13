@@ -16,7 +16,7 @@ export default new Router({
     {
       path: '/index',
       name: 'index',
-      mate : {
+      meta : {
         requireAuth: true,
       },
       component: Index

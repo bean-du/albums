@@ -16,7 +16,6 @@ const store = new Vuex.Store({
             albumNames : [],
         },
         images : [],
-        baseUrl : 'http://59.110.160.110:9990',
     },
     getters :{
         getToken(state){
@@ -26,7 +25,20 @@ const store = new Vuex.Store({
             return state.userInfo.albumNames;
         },
         getImagesList(state){
-            return state.images;
+            let images = state.images;
+            images.forEach(function (item) {
+                item.url = 'http://' + item.url;
+            });
+            return images;
+        },
+        isLogin() {
+            let  token_expire = Date.parse(new Date(localStorage.token_expire));
+            let now_time = Date.parse(new Date()) / 1000;
+            if (localStorage.token != '' && token_expire > now_time){
+                return true;
+            }else {
+                return false;
+            }
         }
     },
     mutations : {

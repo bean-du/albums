@@ -13,8 +13,7 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">upload</a></li>
-                        <li><a href="#">logout</a></li>
+                        <li><a href="#">退出</a></li>
                     </ul>
                     <form class="navbar-form navbar-right">
                         <input type="text" class="form-control" placeholder="Search...">
@@ -26,29 +25,35 @@
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
                     <ul class="nav nav-sidebar">
-                        <li class="active"><a href="#">相册列表 <span class="sr-only">(current)</span></a></li>
-                        <li><a href="#" v-for="list in albumsName" @click="listImages(list)">{{list}}</a></li>
+                        <li class="active"><a href="#"><i class="fa fa-folder" aria-hidden="true"></i> 相册列表  <span class="sr-only">(current)</span></a></li>
+                        <li>
+                            <a href="#" v-for="list in albumsName" @click="listImages(list)"><i class="fa fa-picture-o" aria-hidden="true"></i> {{list}} <span class="btn btn-default btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i> 删除</span></a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                     <upload-image :show.sync="show"></upload-image>
-                    <el-button type="button" @click="uploadImage">上传照片到此相册</el-button>
+                    <el-button class="my-upload" type="button" @click="uploadImage">上传照片到此相册</el-button>
                     <h1 class="page-header"></h1>
 
                     <div class="row placeholders">
                         <div class="col-xs-6 col-sm-3 placeholder" v-for="image in images">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
+                            <img :src="image.url" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                            <h4>{{image.album}} </h4>
+                            <span class="text-muted">{{image.filename}}</span>
+                            <a  :href="image.url">下载</a>
+                            <el-button size="small" type="danger" @click="deleteImage(image.url,image.album)">删除</el-button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </template>
 <script>
 import axios from 'axios';
+import qs from 'qs';
 import UploadImage from './UploadImage.vue';
 export default {
     name : 'index',
@@ -87,7 +92,7 @@ export default {
         },
         // 获取选中的相册的图片列表
         listImages (name){
-            axios.post('/auth/download?page=1&size=10',JSON.stringify({username :localStorage.userName,album:name})).then(res => {
+            axios.post('/auth/download?page=1&size=10',qs.stringify({username :localStorage.userName,album:name})).then(res => {
                 if (res.data.status == 0){
                     if (res.data.data == null){
                         this.$notify({
@@ -100,8 +105,30 @@ export default {
                     }
                 }else {
                     this.$msgbox({
-                        title : '提示',
+                        title : '提示信息',
                         message : '没有此相册',
+                    })
+                }
+            }).catch(err => {
+
+            })
+        },
+        // 删除图片
+        deleteImage (image,album){
+            console.log(image);
+            axios.post('/auth/delete',qs.stringify({username : localStorage.userName,album : album,md5:image.split('/')[4]})).then(res => {
+                if (res.data.status == 0){
+                    this.$notify({
+                        title : '提示信息',
+                        message : '删除成功',
+                        type : 'success'
+                    });
+                    this.listImages(album);
+                }else {
+                    this.$notify({
+                        title : '提示信息',
+                        message : '删除失败',
+                        type : 'error'
                     })
                 }
             }).catch(err => {
@@ -137,6 +164,7 @@ export default {
 
     /* Hide for mobile, show later */
     .sidebar {
+        text-align: left;
         display: none;
     }
     @media (min-width: 768px) {
@@ -175,6 +203,9 @@ export default {
      */
     .main {
         padding: 20px;
+        margin-top: -65px;
+    }
+    .main > span {
     }
     @media (min-width: 768px) {
         .main {
