@@ -33,7 +33,8 @@ const store = new Vuex.Store({
         },
         isLogin() {
             let  token_expire = Date.parse(new Date(localStorage.token_expire));
-            let now_time = Date.parse(new Date()) / 1000;
+            let now_time = Date.parse(new Date());
+            console.log('now_time : ',now_time,'expire : ',token_expire);
             if (localStorage.token != '' && token_expire > now_time){
                 return true;
             }else {
